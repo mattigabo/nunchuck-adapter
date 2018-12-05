@@ -87,9 +87,12 @@ namespace nunchuckadapter{
             NunchuckAccelerometer accelerometer = NunchuckAccelerometer(accelX, accelY, accelZ);
 
             int c = (readBuffer[5] & 0x02) >> 1;
-            int z = readBuffer[5] & 0x01;
+            NunchuckButton buttonC = NunchuckButton(c);
 
-            return NunchuckData(joystick, accelerometer);
+            int z = readBuffer[5] & 0x01;
+            NunchuckButton buttonZ = NunchuckButton(z);
+
+            return NunchuckData(joystick, accelerometer, buttonZ, buttonC);
         };
     private:
         bool encyptedModeEnabled;

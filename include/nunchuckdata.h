@@ -7,18 +7,24 @@
 
 #include "threeaxisaccelerometer.h"
 #include "joystick.h"
+#include "button.h"
 
 namespace nunchuckadapter {
 
     class NunchuckData{
     public:
-        NunchuckData(NunchuckJoystick joystick, NunchuckAccelerometer accelerometer){
+        NunchuckData(NunchuckJoystick joystick,
+                NunchuckAccelerometer accelerometer,
+                NunchuckButton buttonZ,
+                NunchuckButton buttonC){
             this->joystick = joystick;
             this->accelerometer = accelerometer;
+            this->buttonZ = buttonZ;
+            this->buttonC = buttonC;
         }
 
         NunchuckData(){
-            NunchuckData(NunchuckJoystick(),NunchuckAccelerometer());
+            NunchuckData(NunchuckJoystick(),NunchuckAccelerometer(), NunchuckButton(), NunchuckButton());
         }
 
         ThreeAxisAcceleration<int> getAccelerationValues() {
@@ -31,6 +37,8 @@ namespace nunchuckadapter {
     private:
         NunchuckJoystick joystick;
         NunchuckAccelerometer accelerometer;
+        NunchuckButton buttonZ;
+        NunchuckButton buttonC;
     };
 }
 
