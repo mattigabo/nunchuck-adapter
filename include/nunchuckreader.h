@@ -10,8 +10,8 @@
 #include "platformchecker.h"
 
 #ifdef __RASPBERRYPI_PLATFORM__
-#include<wiringPi.h>
-#include<wiringPiI2C.h>
+#include <wiringPi.h>
+#include <wiringPiI2C.h>
 #else
 #include "mockedwiringpi.h"
 #endif

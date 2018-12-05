@@ -6,7 +6,7 @@
 #include<cerrno>
 
 #ifdef  __RASPBERRYPI_PLATFORM__
-#include<wiringPi.h>
+#include <wiringPi.h>
 #else
 #include "mockedwiringpi.h"
 #endif
