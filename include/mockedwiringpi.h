@@ -13,33 +13,36 @@
  * */
 #include <iostream>
 
-struct MockedWiringPiI2C{
-    int i2CFileDescriptor;
-};
+namespace  nunchuckadapter {
 
-MockedWiringPiI2C mockedI2C = { 42 };
+    struct MockedWiringPiI2C {
+        int i2CFileDescriptor;
+    };
 
-void wiringPiSetup(){
-    std::cout << "Set up function of the WiringPi Library Called" << std::endl;
-}
+    MockedWiringPiI2C mockedI2C = {42};
 
-int wiringPiI2CSetup(int deviceAddress){
-    return mockedI2C.i2CFileDescriptor;
-}
+    void wiringPiSetup() {
+        std::cout << "Set up function of the WiringPi Library Called" << std::endl;
+    }
 
-void wiringPiI2CWriteReg8(int i2CPortFileDescriptor, int deviceAddress, int data){
-    std::cout <<
-    "Write on i2c port > Device Address " << deviceAddress <<
-    " Data: " << data
-    << std::endl;
-}
+    int wiringPiI2CSetup(int deviceAddress) {
+        return mockedI2C.i2CFileDescriptor;
+    }
 
-void wiringPiI2CWrite(int i2CPortFileDescriptor, int data){
-    std::cout << "Write on i2c port > Data: " << data << std::endl;
-}
+    void wiringPiI2CWriteReg8(int i2CPortFileDescriptor, int deviceAddress, int data) {
+        std::cout <<
+                  "Write on i2c port > Device Address " << deviceAddress <<
+                  " Data: " << data
+                  << std::endl;
+    }
 
-int wiringPiI2CRead(int i2CPortFileDescriptor){
-    return 0;
+    void wiringPiI2CWrite(int i2CPortFileDescriptor, int data) {
+        std::cout << "Write on i2c port > Data: " << data << std::endl;
+    }
+
+    int wiringPiI2CRead(int i2CPortFileDescriptor) {
+        return 0;
+    }
 }
 
 #endif //__RASPBERRYPI_PLATFORM__
