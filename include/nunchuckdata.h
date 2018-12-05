@@ -16,7 +16,8 @@ namespace nunchuckwiringpi {
     class NunchuckData{
     public:
         NunchuckData(NunchuckJoystick joystick, NunchuckAccelerometer accelerometer){
-
+            this->joystick = joystick;
+            this->accelerometer;
         }
 
         ThreeAxisAcceleration<int> getAccelerationValues() {
