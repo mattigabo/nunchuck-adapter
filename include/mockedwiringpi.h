@@ -4,6 +4,9 @@
 
 #ifndef NUNCHUCKADAPTER_MOCKEDWIRINGPI_H
 #define NUNCHUCKADAPTER_MOCKEDWIRINGPI_H
+
+#ifndef __RASPBERRYPI_PLATFORM__
+
 /**
  * In this file can be found mocked implementation of the WiringPi function used in other project file.
  * These functions are used for code testing purposes on another platform for which the WiringPi library is not available
@@ -38,4 +41,7 @@ void wiringPiI2CWrite(int i2CPortFileDescriptor, int data){
 int wiringPiI2CRead(int i2CPortFileDescriptor){
     return 0;
 }
+
+#endif //__RASPBERRYPI_PLATFORM__
+
 #endif //NUNCHUCKADAPTER_MOCKEDWIRINGPI_H
