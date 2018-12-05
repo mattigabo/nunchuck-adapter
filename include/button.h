@@ -8,7 +8,7 @@
 namespace nunchuckadapter{
     class Button{
     public:
-        Button(bool initialState){
+        explicit Button(const bool initialState){
             is_pressed = initialState;
         }
         bool isPressed(){
@@ -23,7 +23,7 @@ namespace nunchuckadapter{
         NunchuckButton(): Button(false){
         }
 
-        NunchuckButton(int buttonValue): Button(false){
+        explicit NunchuckButton(const int buttonValue): Button(false){
             this->setState(buttonValue);
         }
 
@@ -36,7 +36,6 @@ namespace nunchuckadapter{
         void setState(int valueRead){
             is_pressed = valueRead == 0;
         }
-
     };
 }
 

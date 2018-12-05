@@ -23,9 +23,7 @@ namespace nunchuckadapter {
             this->buttonC = buttonC;
         }
 
-        NunchuckData(){
-            NunchuckData(NunchuckJoystick(),NunchuckAccelerometer(), NunchuckButton(), NunchuckButton());
-        }
+        NunchuckData(): NunchuckData(NunchuckJoystick(),NunchuckAccelerometer(), NunchuckButton(), NunchuckButton()){};
 
         ThreeAxisAcceleration<int> getAccelerationValues() {
             return accelerometer.getAcceleration();

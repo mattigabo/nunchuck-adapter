@@ -1,11 +1,16 @@
 #include <iostream>
 
-#include<stdio.h>
+#include<cstdio>
 #include<unistd.h>
-#include<stdlib.h>
+#include<cstdlib>
+#include<cerrno>
+
+#ifdef  __RASPBERRYPI_PLATFORM__
 #include<wiringPi.h>
-#include<wiringPiI2C.h>
-#include<errno.h>
+#else
+#include "mockedwiringpi.h"
+#endif
+
 #include "nunchuckdata.h"
 #include "nunchuckreader.h"
 #include "nunchuckdatasampler.h"
@@ -20,21 +25,35 @@ int main() {
     wiringPiSetup();
     try{
         cout << "Test read directly from the main thread" << endl;
-        NunchuckReader nunchuckReader = NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
-        for(int i = 0; i < 100;  i++){
-            NunchuckData values = nunchuckReader.readDeviceValues();
-            cout << "Joystick pos: " << values.getJoystickPosition().X;
+        auto reader = new NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
+        for(int i = 0; i < 20;  i++){
+            NunchuckData values = reader->readDeviceValues();
+            cout << "Value sampled by the Main Thread > Joystick pos: " <<
+            values.getJoystickPosition().X << endl;
         }
 
+        cout << "-----------------------------------------------" << endl;
         cout << "Test read from the NunchuckDataSampler thread" << endl;
-        NunchuckDataStore dataStore = NunchuckDataStore();
-        NunchuckDataSampler updater = NunchuckDataSampler(&nunchuckReader, &dataStore);
-        for(int i = 0; i < 100;  i++){
-            NunchuckData values = dataStore.fetch();
-            cout << "Joystick pos: " << values.getJoystickPosition().X;
-            std::this_thread::sleep_for(chrono::milliseconds(1500));
+        auto dataStore = new NunchuckDataStore();
+        auto sampler = new NunchuckDataSampler(reader, dataStore);
+        for(int i = 0; i < 20;  i++){
+            NunchuckData values = dataStore->fetch();
+            cout << "Value sampled by a NunchuckDataSampler > Joystick pos: " <<
+            values.getJoystickPosition().X << endl;
+            std::this_thread::sleep_for(chrono::milliseconds(1000));
         }
 
+        cout << "-----------------------------------------------" << endl;
+        cout << "Notify stop to the sampler..." << endl;
+        sampler->notifyStop();
+        cout << "Wait the sampler termination..." << endl;
+        sampler->join();
+
+        cout << "-----------------------------------------------" << endl;
+        cout << "Bye Bye" << endl;
+        free(sampler);
+        free(dataStore);
+        free(reader);
     } catch(std::exception &ex)  {
         cerr << "ERROR: " << ex.what() << endl;
         exit(-1);

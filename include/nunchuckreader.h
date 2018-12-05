@@ -5,10 +5,16 @@
 #ifndef NUNCHUCKADAPTER_NUNCHUCKREADER_H
 #define NUNCHUCKADAPTER_NUNCHUCKREADER_H
 
+#include <thread>
 #include "nunchuckdata.h"
+#include "platformchecker.h"
 
+#ifdef __RASPBERRYPI_PLATFORM__
 #include<wiringPi.h>
 #include<wiringPiI2C.h>
+#else
+#include "mockedwiringpi.h"
+#endif
 
 namespace nunchuckadapter{
 
@@ -30,9 +36,12 @@ namespace nunchuckadapter{
          *  Specify the circuit adaptation microseconds that you want to wait at every interaction with the Nunchuck device.
          *  In order to avoid problems this values can't be less than 300 microseconds.
          * */
-        NunchuckReader(int circuitAdaptationWaitMicroseconds, InitializationMode initializationMode){
+        NunchuckReader(const int circuitAdaptationWaitMicroseconds, const InitializationMode initializationMode){
             if(circuitAdaptationWaitMicroseconds < MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS){
-                throw "The minimun circuit adapdation wait time is " + NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS + " microseconds. Please specify a value less than" + Nunchuck::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS;
+                throw "The minimun circuit adapdation wait time is "
+                + std::to_string(NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS)
+                + " microseconds. Please specify a value less than"
+                + std::to_string(NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS);
             }
             this->circuitAdaptationWaitMicrosecons = circuitAdaptationWaitMicroseconds;
 
@@ -47,7 +56,6 @@ namespace nunchuckadapter{
                     break;
                 default:
                     throw "Invalid initialization mode";
-                    break;
             }
         }
 
@@ -55,9 +63,9 @@ namespace nunchuckadapter{
          * Create a Nunchuck reader object where the circuit adaptation wait microseconds is automatic set to
          * the default value specified in the relative costant
          * */
-        NunchuckReader(InitializationMode initializationMode){
-            NunchuckReader(NunchuckReader::DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS, initializationMode);
-        }
+        explicit NunchuckReader(const InitializationMode initializationMode):
+        NunchuckReader(NunchuckReader::DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS, initializationMode){}
+
 
         /**
          * Check if the Nunchuck has been initialized with enryction mode
@@ -108,14 +116,14 @@ namespace nunchuckadapter{
 
         void initWithEncryption(){
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0x40, 0x00);
-            delayMicroseconds(circuitAdaptationWaitMicrosecons);
+            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
             encyptedModeEnabled = true;
         }
 
         void initWithoutEncryption(){
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xF0, 0x55);
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xFB, 0x00);
-            delayMicroseconds(circuitAdaptationWaitMicrosecons);
+            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
             encyptedModeEnabled = false;
         }
 
@@ -123,13 +131,13 @@ namespace nunchuckadapter{
          * Decryption function for bytes read from the Nunchuck when
          * it is inizialized with the encryption mode
          * */
-        int decrypt(int readByte){
+        int decrypt(const int readByte){
             return (readByte ^ 0x17) + 0x17;
         }
 
         void readRawData(int *readBuffer) {
             wiringPiI2CWrite(i2CPortFileDescriptor, 0x00);
-            delayMicroseconds(circuitAdaptationWaitMicrosecons);
+            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
 
             int i;
             for (i=0; i<6; i++) {

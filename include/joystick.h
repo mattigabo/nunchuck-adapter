@@ -31,22 +31,21 @@ namespace nunchuckadapter {
         static const int CLASSIC_NUNCHUCK_FULLY_RIGHT_X_VALUE = 228;
         static const int CLASSIC_NUNCHUCK_FULLY_UP_Y_VALUE = 27;
         static const int CLASSIC_NUNCHUCK_FULLY_DOWN_X_VALUE = 220;
-        static constexpr JoystickPosition<int> CLASSIC_NUNCHUCK_CENTER_VALUE = { 128, 128};
+        static constexpr JoystickPosition<int> GET_CLASSIC_NUNCHUCK_CENTER_VALUE() { return {.X = 128, .Y = 128}; };
 
-        NunchuckJoystick(int x, int y) {
-            position.X = x;
-            position.Y = y;
+        NunchuckJoystick(const int x,const  int y) {
+            position = { x, y };
         }
 
         NunchuckJoystick() {
-            position = CLASSIC_NUNCHUCK_CENTER_VALUE;
+            position = NunchuckJoystick::GET_CLASSIC_NUNCHUCK_CENTER_VALUE();
         }
 
-        JoystickPosition<int> getPosition() {
+        JoystickPosition<int> getPosition() override {
             return position;
         }
 
-        void updatePosition(int x, int y){
+        void updatePosition(const int x, const int y){
             position.X = x;
             position.Y = y;
         }

@@ -19,7 +19,8 @@ namespace nunchuckadapter{
         NunchuckDataStore(){
             this->nunchuckData = NunchuckData();
         }
-        void store(NunchuckData data){
+
+        void store(const NunchuckData data){
             std::lock_guard <std::mutex> lock(internal_mutex);
             this->nunchuckData = data;
         }
@@ -43,22 +44,27 @@ namespace nunchuckadapter{
     public:
         NunchuckDataSampler(NunchuckReader* deviceReader, NunchuckDataStore* dataStore){
             this->nunchuckReader = deviceReader;
-            this->valueUpdater = std::thread(updateBehaviour, this);
+            this->dataStore = dataStore;
+            this->valueSamplerThread = std::thread(&NunchuckDataSampler::updateBehaviour, this);
         }
 
         void notifyStop(){
             shouldContinue = false;
         }
+
+        void join(){
+            this->valueSamplerThread.join();
+        }
     private:
         NunchuckReader* nunchuckReader;
         NunchuckDataStore* dataStore;
         bool shouldContinue = true;
-        std::thread valueUpdater;
+        std::thread valueSamplerThread;
         std::function<void(void)> updateBehaviour = [&]() {
             while(shouldContinue) {
                 dataStore->store(nunchuckReader->readDeviceValues());
             }
-        };
+        };;
     };
 }
 

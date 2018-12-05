@@ -25,22 +25,27 @@ namespace nunchuckadapter {
         static const int MIN_ACCELEROMETER_VALUE = 0;
         static const int MAX_ACCELEROMETER_VALUE = 1023;
 
-        NunchuckAccelerometer(int accelerationOnX, int accelerationOnY, int accelerationOnZ){
-            acceleration.X = accelerationOnX;
-            acceleration.Y = accelerationOnY;
-            acceleration.Z = accelerationOnZ;
+        NunchuckAccelerometer(const int accelerationOnX,const  int accelerationOnY,const  int accelerationOnZ){
+            acceleration = {
+                    accelerationOnX,
+                    accelerationOnY,
+                    accelerationOnZ
+            };
         }
 
         NunchuckAccelerometer() {
-            acceleration.X = MAX_ACCELEROMETER_VALUE / 2;
-            acceleration.Y = MAX_ACCELEROMETER_VALUE / 2;
-            acceleration.Z = MAX_ACCELEROMETER_VALUE / 2;
+            acceleration = {
+                    MAX_ACCELEROMETER_VALUE / 2,
+                    MAX_ACCELEROMETER_VALUE / 2,
+                    MAX_ACCELEROMETER_VALUE / 2
+            };
         }
-        ThreeAxisAcceleration<int> getAcceleration() {
+
+        ThreeAxisAcceleration<int> getAcceleration() override {
             return acceleration;
         }
 
-        void updateAcceleration(int accelerationOnX, int accelerationOnY, int accelerationOnZ){
+        void updateAcceleration(const int accelerationOnX,const  int accelerationOnY,const  int accelerationOnZ){
             acceleration.X = accelerationOnX;
             acceleration.Y = accelerationOnY;
             acceleration.Z = accelerationOnZ;
