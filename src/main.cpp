@@ -9,7 +9,7 @@
 #include<errno.h>
 #include "nunchuckdata.h"
 #include "nunchuckreader.h"
-#include "nunchuckupdater.h"
+#include "nunchuckdatasampler.h"
 
 using namespace std;
 using namespace nunchuckadapter;
@@ -27,9 +27,9 @@ int main() {
             cout << "Joystick pos: " << values.getJoystickPosition().X;
         }
 
-        cout << "Test read from the NunchuckUpdater thread" << endl;
+        cout << "Test read from the NunchuckDataSampler thread" << endl;
         NunchuckDataStore dataStore = NunchuckDataStore();
-        NunchuckUpdater updater = NunchuckUpdater(&nunchuckReader, &dataStore);
+        NunchuckDataSampler updater = NunchuckDataSampler(&nunchuckReader, &dataStore);
         for(int i = 0; i < 100;  i++){
             NunchuckData values = dataStore.fetch();
             cout << "Joystick pos: " << values.getJoystickPosition().X;

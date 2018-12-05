@@ -2,8 +2,8 @@
 // Created by Matteo Gabellini on 2018-12-05.
 //
 
-#ifndef NUNCHUCK_ADAPTER_NUNCHUCKREADER_H
-#define NUNCHUCK_ADAPTER_NUNCHUCKREADER_H
+#ifndef NUNCHUCKADAPTER_NUNCHUCKREADER_H
+#define NUNCHUCKADAPTER_NUNCHUCKREADER_H
 
 #include "nunchuckdata.h"
 
@@ -137,4 +137,4 @@ namespace nunchuckadapter{
     };
 }
 
-#endif //NUNCHUCK_ADAPTER_NUNCHUCKREADER_H
+#endif //NUNCHUCKADAPTER_NUNCHUCKREADER_H

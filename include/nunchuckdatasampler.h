@@ -2,8 +2,8 @@
 // Created by Matteo Gabellini on 2018-12-04.
 //
 
-#ifndef NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H
-#define NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H
+#ifndef NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H
+#define NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H
 
 #include <thread>
 #include "nunchuckdata.h"
@@ -11,7 +11,7 @@
 
 namespace nunchuckadapter{
     /*
-     * This class represent a thread safe structure where a NunchuckUpdater store data
+     * This class represent a thread safe structure where a NunchuckDataSampler store data
      * read from the device and expose a function to read the stored data
      * */
     class NunchuckDataStore{
@@ -39,9 +39,9 @@ namespace nunchuckadapter{
      * that read continuously data from the Nunchuck and put the read data in a
      * NunchuckDataStore object
      * */
-    class NunchuckUpdater{
+    class NunchuckDataSampler{
     public:
-        NunchuckUpdater(NunchuckReader* deviceReader, NunchuckDataStore* dataStore){
+        NunchuckDataSampler(NunchuckReader* deviceReader, NunchuckDataStore* dataStore){
             this->nunchuckReader = deviceReader;
             this->valueUpdater = std::thread(updateBehaviour, this);
         }
@@ -62,4 +62,4 @@ namespace nunchuckadapter{
     };
 }
 
-#endif //NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H
+#endif //NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H

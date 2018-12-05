@@ -2,8 +2,8 @@
 // Created by Matteo Gabellini on 2018-12-03.
 //
 
-#ifndef NUNCHUCK_ADAPTER_JOYSTICK_H
-#define NUNCHUCK_ADAPTER_JOYSTICK_H
+#ifndef NUNCHUCKADAPTER_JOYSTICK_H
+#define NUNCHUCKADAPTER_JOYSTICK_H
 
 #include <mutex>
 
@@ -55,4 +55,4 @@ namespace nunchuckadapter {
     };
 }
 
-#endif //NUNCHUCK_ADAPTER_JOYSTICK_H
+#endif //NUNCHUCKADAPTER_JOYSTICK_H

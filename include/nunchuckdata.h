@@ -2,8 +2,8 @@
 // Created by Matteo Gabellini on 2018-11-29.
 //
 
-#ifndef NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
-#define NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
+#ifndef NUNCHUCKADAPTER_NUNCHUCK_DATA_H
+#define NUNCHUCKADAPTER_NUNCHUCK_DATA_H
 
 #include "threeaxisaccelerometer.h"
 #include "joystick.h"
@@ -34,4 +34,4 @@ namespace nunchuckadapter {
     };
 }
 
-#endif //NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
+#endif //NUNCHUCKADAPTER_NUNCHUCK_DATA_H

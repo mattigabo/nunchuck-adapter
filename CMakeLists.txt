@@ -14,8 +14,8 @@ add_executable(NunchuckAdapter
         include/nunchuckdata.h
         include/threeaxisaccelerometer.h
         include/joystick.h
-        include/nunchuckupdater.h
-        include/nunchuckreader.h)
+        include/nunchuckdatasampler.h
+        include/nunchuckreader.h include/button.h)
 
 #check if is arm architecture
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
