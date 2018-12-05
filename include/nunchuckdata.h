@@ -8,9 +8,6 @@
 #include "threeaxisaccelerometer.h"
 #include "joystick.h"
 
-#include<wiringPi.h>
-#include<wiringPiI2C.h>
-
 namespace nunchuckwiringpi {
 
     class NunchuckData{

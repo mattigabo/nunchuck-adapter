@@ -25,11 +25,16 @@ namespace nunchuckwiringpi{
         static const int MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS = 300;
         static const int DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS = 500;
 
-        NunchuckReader(int circuitAdaptationWaitMicrosecons, InitializationMode initializationMode){
-            if(circuitAdaptationWaitMicrosecons < MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS){
-                throw "The minimun circuit adapdation wait time is " + Nunchuck::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS + " microseconds. Please specify a value less than" + Nunchuck::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS;
+        /*
+         *  Create a Nunchuck reader object.
+         *  Specify the circuit adaptation microseconds that you want to wait at every interaction with the Nunchuck device.
+         *  In order to avoid problems this values can't be less than 300 microseconds.
+         * */
+        NunchuckReader(int circuitAdaptationWaitMicroseconds, InitializationMode initializationMode){
+            if(circuitAdaptationWaitMicroseconds < MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS){
+                throw "The minimun circuit adapdation wait time is " + NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS + " microseconds. Please specify a value less than" + Nunchuck::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS;
             }
-            this->circuitAdaptationWaitMicrosecons = circuitAdaptationWaitMicrosecons;
+            this->circuitAdaptationWaitMicrosecons = circuitAdaptationWaitMicroseconds;
 
             initI2C();
 
@@ -46,6 +51,10 @@ namespace nunchuckwiringpi{
             }
         }
 
+        /*
+         * Create a Nunchuck reader object where the circuit adaptation wait microseconds is automatic set to
+         * the default value specified in the relative costant
+         * */
         NunchuckReader(InitializationMode initializationMode){
             NunchuckReader(NunchuckReader::DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS, initializationMode);
         }
@@ -75,7 +84,9 @@ namespace nunchuckwiringpi{
         }
 
         /*
-         * Read the values of the nunchuck
+         * Read the values of the nunchuck.
+         * The read require minimun the microseconds specified in the constructor as
+         * "circuitAdaptationWaitMicroseconds".
          * @return an NunchuckData object that contains the data
          * read from the device
          * */
@@ -112,12 +123,12 @@ namespace nunchuckwiringpi{
         }
 
         void readRawData(int *readBuffer) {
-            wiringPiI2CWrite(fd, 0x00);
+            wiringPiI2CWrite(i2CPortFileDescriptor, 0x00);
             delayMicroseconds(circuitAdaptationWaitMicrosecons);
 
             int i;
             for (i=0; i<6; i++) {
-                readBuffer[i] = wiringPiI2CRead(fd);
+                readBuffer[i] = wiringPiI2CRead(i2CPortFileDescriptor);
             }
         };
 
