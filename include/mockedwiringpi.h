@@ -5,6 +5,8 @@
 #ifndef NUNCHUCKADAPTER_MOCKEDWIRINGPI_H
 #define NUNCHUCKADAPTER_MOCKEDWIRINGPI_H
 
+#include "platformchecker.h"
+
 #ifndef __RASPBERRYPI_PLATFORM__
 
 /**
