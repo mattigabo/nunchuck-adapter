@@ -22,6 +22,10 @@ add_executable(NunchuckAdapter
         include/platformchecker.h
         include/mockedwiringpi.h)
 
+#linking
+target_link_libraries(NunchuckAdapter pthread)
+
+
 #check if is arm architecture
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 message( STATUS "Architecture: ${ARCHITECTURE}" )
