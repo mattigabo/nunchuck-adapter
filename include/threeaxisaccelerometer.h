@@ -9,7 +9,7 @@
 
 namespace nunchuckadapter {
     template<class T>
-    typedef struct ThreeAxisAcceleration{
+    struct ThreeAxisAcceleration{
         T X;
         T Y;
         T Z;

@@ -9,7 +9,7 @@
 
 namespace nunchuckadapter {
     template<class T>
-    typedef struct JoystickPosition{
+    struct JoystickPosition{
         T X;
         T Y;
     };
