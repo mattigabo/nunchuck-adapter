@@ -11,10 +11,10 @@ include_directories(
 message(${PROJECT_SOURCE_DIR})
 add_executable(NunchuckWiringPi
         src/main.cpp
-        include/nunchuck.h
+        include/nunchuckdata.h
         include/threeaxisaccelerometer.h
         include/joystick.h
-        include/nunchuckupdater.h)
+        include/nunchuckupdater.h include/nunchuckreader.h)
 
 #check if is arm architecture
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )

@@ -22,20 +22,24 @@ namespace nunchuckwiringpi {
 
     class NunchuckAccelerometer : ThreeAxisAccelerometer<int>{
     public:
+        NunchuckAccelerometer(int accelerationOnX, int accellerationOnY, int accelerationOnZ){
+            acceleration.X = accelerationOnX;
+            acceleration.Y = accelerationOnY;
+            acceleration.Z = accelerationOnZ;
+        }
+
         NunchuckAccelerometer();
         ThreeAxisAcceleration<int> getAcceleration() {
-            std::lock_guard <std::mutex> lock(internal_mutex);
             return acceleration;
         }
+
         void updateAcceleration(int accelerationOnX, int accelerationOnY, int accelerationOnZ){
-            std::lock_guard <std::mutex> lock(internal_mutex);
             acceleration.X = accelerationOnX;
             acceleration.Y = accelerationOnY;
             acceleration.Z = accelerationOnZ;
         }
     private:
         ThreeAxisAcceleration<int> acceleration;
-        std::mutex internal_mutex;
     };
 }
 

@@ -33,22 +33,24 @@ namespace nunchuckwiringpi {
         static const int CLASSIC_NUNCHUCK_FULLY_DOWN_X_VALUE = 220;
         static constexpr JoystickPosition<int> CLASSIC_NUNCHUCK_CENTER_VALUE = { 128, 128};
 
-        NunchuckJoystick(){
+        NunchuckJoystick(int x, int y) {
+            position.X = x;
+            position.Y = y;
+        }
+
+        NunchuckJoystick() {
             position = CLASSIC_NUNCHUCK_CENTER_VALUE;
         }
 
         JoystickPosition<int> getPosition() {
-            std::lock_guard <std::mutex> lock(internal_mutex);
             return position;
         }
         void updatePosition(int x, int y){
-            std::lock_guard <std::mutex> lock(internal_mutex);
             position.X = x;
             position.Y = y;
         }
     private:
         JoystickPosition<int> position;
-        std::mutex internal_mutex;
     };
 }
 

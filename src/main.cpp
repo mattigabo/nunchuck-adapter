@@ -7,7 +7,8 @@
 #include<wiringPi.h>
 #include<wiringPiI2C.h>
 #include<errno.h>
-#include "nunchuck.h"
+#include "nunchuckdata.h"
+#include "nunchuckreader.h"
 
 using namespace std;
 using namespace nunchuckwiringpi;
@@ -18,11 +19,10 @@ int main() {
     printf("Testing the nunchuck through I2C with the wiringPi Library\n");
     wiringPiSetup();
     try{
-        Nunchuck nunchuck = Nunchuck();
-        nunchuck.initWithoutEncryption();
+        NunchuckReader nunchuckReader = NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
         while(1){
-            nunchuck.updateValues();
-            cout << "Joystick pos: " << nunchuck
+            NunchuckData values = nunchuckReader.readDeviceValues();
+            cout << "Joystick pos: " << values.getJoystickPosition().X;
         }
     } catch(std::exception &ex)  {
         cerr << "ERROR: " << ex.what() << endl;

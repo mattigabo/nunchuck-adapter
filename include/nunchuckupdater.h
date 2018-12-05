@@ -6,7 +6,7 @@
 #define NUNCHUCKWIRINGPI_NUNCHUCKOBSERVER_H
 
 #include <thread>
-#include "nunchuck.h"
+#include "nunchuckdata.h"
 
 namespace nunchuckwiringpi{
     class NunchuckUpdater{
