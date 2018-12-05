@@ -9,21 +9,33 @@
 #include<errno.h>
 #include "nunchuckdata.h"
 #include "nunchuckreader.h"
+#include "nunchuckupdater.h"
 
 using namespace std;
-using namespace nunchuckwiringpi;
+using namespace nunchuckadapter;
 
 int main() {
     int NUNCHUCK_DEVICE = 0x52;
 
-    printf("Testing the nunchuck through I2C with the wiringPi Library\n");
+    cout << "Testing the nunchuck through I2C with the wiringPi Library" << endl;
     wiringPiSetup();
     try{
+        cout << "Test read directly from the main thread" << endl;
         NunchuckReader nunchuckReader = NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
-        while(1){
+        for(int i = 0; i < 100;  i++){
             NunchuckData values = nunchuckReader.readDeviceValues();
             cout << "Joystick pos: " << values.getJoystickPosition().X;
         }
+
+        cout << "Test read from the NunchuckUpdater thread" << endl;
+        NunchuckDataStore dataStore = NunchuckDataStore();
+        NunchuckUpdater updater = NunchuckUpdater(&nunchuckReader, &dataStore);
+        for(int i = 0; i < 100;  i++){
+            NunchuckData values = dataStore.fetch();
+            cout << "Joystick pos: " << values.getJoystickPosition().X;
+            std::this_thread::sleep_for(chrono::milliseconds(1500));
+        }
+
     } catch(std::exception &ex)  {
         cerr << "ERROR: " << ex.what() << endl;
         exit(-1);

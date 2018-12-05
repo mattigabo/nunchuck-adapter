@@ -2,18 +2,18 @@
 // Created by Matteo Gabellini on 2018-12-05.
 //
 
-#ifndef NUNCHUCKWIRINGPI_NUNCHUCKREADER_H
-#define NUNCHUCKWIRINGPI_NUNCHUCKREADER_H
+#ifndef NUNCHUCK_ADAPTER_NUNCHUCKREADER_H
+#define NUNCHUCK_ADAPTER_NUNCHUCKREADER_H
 
 #include "nunchuckdata.h"
 
 #include<wiringPi.h>
 #include<wiringPiI2C.h>
 
-namespace nunchuckwiringpi{
+namespace nunchuckadapter{
 
-    /*
-    * This class encapsulate the interaction with Nunchuck and the relative I2C protocol management.
+    /**
+    * This class encapsulate the interaction with Nunchuck ciurcuit through I2C protocol.
     * */
     class NunchuckReader {
     public:
@@ -25,7 +25,7 @@ namespace nunchuckwiringpi{
         static const int MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS = 300;
         static const int DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS = 500;
 
-        /*
+        /**
          *  Create a Nunchuck reader object.
          *  Specify the circuit adaptation microseconds that you want to wait at every interaction with the Nunchuck device.
          *  In order to avoid problems this values can't be less than 300 microseconds.
@@ -51,7 +51,7 @@ namespace nunchuckwiringpi{
             }
         }
 
-        /*
+        /**
          * Create a Nunchuck reader object where the circuit adaptation wait microseconds is automatic set to
          * the default value specified in the relative costant
          * */
@@ -59,36 +59,19 @@ namespace nunchuckwiringpi{
             NunchuckReader(NunchuckReader::DEFAULT_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS, initializationMode);
         }
 
+        /**
+         * Check if the Nunchuck has been initialized with enryction mode
+         * */
         bool isEncryptedModeEnabled() {
             return encyptedModeEnabled;
         }
 
-        void initI2C(){
-            i2CPortFileDescriptor = wiringPiI2CSetup(NunchuckReader::NUNCHUCK_I2C_ADDRESS);
-            if (i2CPortFileDescriptor < 0) {
-                throw "Error during the setup of the I2C communication with the Nunchuck";
-            }
-        }
-
-        void initWithEncryption(){
-            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0x40, 0x00);
-            delayMicroseconds(circuitAdaptationWaitMicrosecons);
-            encyptedModeEnabled = true;
-        }
-
-        void initWithoutEncryption(){
-            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xF0, 0x55);
-            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xFB, 0x00);
-            delayMicroseconds(circuitAdaptationWaitMicrosecons);
-            encyptedModeEnabled = false;
-        }
-
-        /*
+        /**
          * Read the values of the nunchuck.
          * The read require minimun the microseconds specified in the constructor as
          * "circuitAdaptationWaitMicroseconds".
          * @return an NunchuckData object that contains the data
-         * read from the device
+         * read from the device.
          * */
         NunchuckData readDeviceValues(){
             int readBuffer[6];
@@ -113,6 +96,25 @@ namespace nunchuckwiringpi{
         int i2CPortFileDescriptor;
         int circuitAdaptationWaitMicrosecons;
 
+        void initI2C(){
+            i2CPortFileDescriptor = wiringPiI2CSetup(NunchuckReader::NUNCHUCK_I2C_ADDRESS);
+            if (i2CPortFileDescriptor < 0) {
+                throw "Error during the setup of the I2C communication with the Nunchuck";
+            }
+        }
+
+        void initWithEncryption(){
+            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0x40, 0x00);
+            delayMicroseconds(circuitAdaptationWaitMicrosecons);
+            encyptedModeEnabled = true;
+        }
+
+        void initWithoutEncryption(){
+            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xF0, 0x55);
+            wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xFB, 0x00);
+            delayMicroseconds(circuitAdaptationWaitMicrosecons);
+            encyptedModeEnabled = false;
+        }
 
         /*
          * Decryption function for bytes read from the Nunchuck when
@@ -135,4 +137,4 @@ namespace nunchuckwiringpi{
     };
 }
 
-#endif //NUNCHUCKWIRINGPI_NUNCHUCKREADER_H
+#endif //NUNCHUCK_ADAPTER_NUNCHUCKREADER_H

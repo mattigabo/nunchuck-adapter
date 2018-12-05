@@ -2,12 +2,12 @@
 // Created by Matteo Gabellini on 2018-12-03.
 //
 
-#ifndef NUNCHUCKWIRINGPI_JOYSTICK_H
-#define NUNCHUCKWIRINGPI_JOYSTICK_H
+#ifndef NUNCHUCK_ADAPTER_JOYSTICK_H
+#define NUNCHUCK_ADAPTER_JOYSTICK_H
 
 #include <mutex>
 
-namespace nunchuckwiringpi {
+namespace nunchuckadapter {
     template<class T>
     typedef struct JoystickPosition{
         T X;
@@ -45,6 +45,7 @@ namespace nunchuckwiringpi {
         JoystickPosition<int> getPosition() {
             return position;
         }
+
         void updatePosition(int x, int y){
             position.X = x;
             position.Y = y;
@@ -54,4 +55,4 @@ namespace nunchuckwiringpi {
     };
 }
 
-#endif //NUNCHUCKWIRINGPI_JOYSTICK_H
+#endif //NUNCHUCK_ADAPTER_JOYSTICK_H

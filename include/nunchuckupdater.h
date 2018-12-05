@@ -2,20 +2,23 @@
 // Created by Matteo Gabellini on 2018-12-04.
 //
 
-#ifndef NUNCHUCKWIRINGPI_NUNCHUCKOBSERVER_H
-#define NUNCHUCKWIRINGPI_NUNCHUCKOBSERVER_H
+#ifndef NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H
+#define NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H
 
 #include <thread>
 #include "nunchuckdata.h"
 #include "nunchuckreader.h"
 
-namespace nunchuckwiringpi{
+namespace nunchuckadapter{
     /*
      * This class represent a thread safe structure where a NunchuckUpdater store data
      * read from the device and expose a function to read the stored data
      * */
     class NunchuckDataStore{
     public:
+        NunchuckDataStore(){
+            this->nunchuckData = NunchuckData();
+        }
         void store(NunchuckData data){
             std::lock_guard <std::mutex> lock(internal_mutex);
             this->nunchuckData = data;
@@ -59,4 +62,4 @@ namespace nunchuckwiringpi{
     };
 }
 
-#endif //NUNCHUCKWIRINGPI_NUNCHUCKOBSERVER_H
+#endif //NUNCHUCK_ADAPTER_NUNCHUCKOBSERVER_H

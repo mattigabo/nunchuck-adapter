@@ -2,19 +2,23 @@
 // Created by Matteo Gabellini on 2018-11-29.
 //
 
-#ifndef NUNCHUCKWIRINGPI_NUNCHUCK_DATA_H
-#define NUNCHUCKWIRINGPI_NUNCHUCK_DATA_H
+#ifndef NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
+#define NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
 
 #include "threeaxisaccelerometer.h"
 #include "joystick.h"
 
-namespace nunchuckwiringpi {
+namespace nunchuckadapter {
 
     class NunchuckData{
     public:
         NunchuckData(NunchuckJoystick joystick, NunchuckAccelerometer accelerometer){
             this->joystick = joystick;
-            this->accelerometer;
+            this->accelerometer = accelerometer;
+        }
+
+        NunchuckData(){
+            NunchuckData(NunchuckJoystick(),NunchuckAccelerometer());
         }
 
         ThreeAxisAcceleration<int> getAccelerationValues() {
@@ -30,4 +34,4 @@ namespace nunchuckwiringpi {
     };
 }
 
-#endif //NUNCHUCKWIRINGPI_NUNCHUCK_DATA_H
+#endif //NUNCHUCK_ADAPTER_NUNCHUCK_DATA_H
