@@ -9,17 +9,35 @@ include_directories(
         "${PROJECT_SOURCE_DIR}/include"
 )
 message(${PROJECT_SOURCE_DIR})
-add_executable(NunchuckAdapter
-        src/main.cpp
-        include/nunchuckdata.h
-        include/threeaxisaccelerometer.h
-        include/joystick.h
-        include/nunchuckdatasampler.h
-        include/nunchuckreader.h include/button.h include/platformchecker.h include/mockedwiringpi.h)
 
 #check if is arm architecture
 EXECUTE_PROCESS( COMMAND uname -m COMMAND tr -d '\n' OUTPUT_VARIABLE ARCHITECTURE )
 message( STATUS "Architecture: ${ARCHITECTURE}" )
+
+if( ${ARCHITECTURE} STREQUAL "armv7l" )
+    add_executable(NunchuckAdapter
+            src/main.cpp
+            include/nunchuckdata.h
+            include/threeaxisaccelerometer.h
+            include/joystick.h
+            include/nunchuckdatasampler.h
+            include/nunchuckreader.h
+            include/button.h
+            include/platformchecker.h)
+else()
+    add_executable(NunchuckAdapter
+            src/main.cpp
+            include/nunchuckdata.h
+            include/threeaxisaccelerometer.h
+            include/joystick.h
+            include/nunchuckdatasampler.h
+            include/nunchuckreader.h
+            include/button.h
+            include/platformchecker.h
+            include/mockedwiringpi.h)
+endif()
+
+
 if( ${ARCHITECTURE} STREQUAL "armv7l" )
     find_library(wiringPi_LIB wiringPi)
     target_link_libraries(NunchuckAdapter ${wiringPi_LIB})
