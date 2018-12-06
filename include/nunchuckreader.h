@@ -116,14 +116,14 @@ namespace nunchuckadapter{
 
         void initWithEncryption(){
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0x40, 0x00);
-            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
+            std::this_thread::sleep_for(std::chrono::microseconds(circuitAdaptationWaitMicrosecons));
             encyptedModeEnabled = true;
         }
 
         void initWithoutEncryption(){
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xF0, 0x55);
             wiringPiI2CWriteReg8(i2CPortFileDescriptor, 0xFB, 0x00);
-            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
+            std::this_thread::sleep_for(std::chrono::microseconds(circuitAdaptationWaitMicrosecons));
             encyptedModeEnabled = false;
         }
 
@@ -137,7 +137,7 @@ namespace nunchuckadapter{
 
         void readRawData(int *readBuffer) {
             wiringPiI2CWrite(i2CPortFileDescriptor, 0x00);
-            std::this_thread::sleep_for(std::chrono::milliseconds(circuitAdaptationWaitMicrosecons));
+            std::this_thread::sleep_for(std::chrono::microseconds(circuitAdaptationWaitMicrosecons));
 
             int i;
             for (i=0; i<6; i++) {

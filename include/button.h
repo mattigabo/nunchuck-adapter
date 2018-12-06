@@ -18,7 +18,7 @@ namespace nunchuckadapter{
         bool is_pressed;
     };
 
-    class NunchuckButton: Button{
+    class NunchuckButton: public Button{
     public:
         NunchuckButton(): Button(false){
         }

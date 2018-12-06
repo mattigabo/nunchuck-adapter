@@ -14,6 +14,7 @@
  * These functions are used for code testing purposes on another platform for which the WiringPi library is not available
  * */
 #include <iostream>
+#include <cstdlib>
 
 namespace  nunchuckadapter {
 
@@ -39,11 +40,11 @@ namespace  nunchuckadapter {
     }
 
     void wiringPiI2CWrite(int i2CPortFileDescriptor, int data) {
-        std::cout << "Write on i2c port > Data: " << data << std::endl;
+        //std::cout << "Write on i2c port > Data: " << data << std::endl;
     }
 
     int wiringPiI2CRead(int i2CPortFileDescriptor) {
-        return 0;
+        return rand() % 256;
     }
 }
 

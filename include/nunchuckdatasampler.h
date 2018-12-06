@@ -46,6 +46,7 @@ namespace nunchuckadapter{
             this->nunchuckReader = deviceReader;
             this->dataStore = dataStore;
             this->valueSamplerThread = std::thread(&NunchuckDataSampler::updateBehaviour, this);
+            shouldContinue = true;
         }
 
         void notifyStop(){
@@ -58,9 +59,9 @@ namespace nunchuckadapter{
     private:
         NunchuckReader* nunchuckReader;
         NunchuckDataStore* dataStore;
-        bool shouldContinue = true;
+        bool shouldContinue;
         std::thread valueSamplerThread;
-        std::function<void(void)> updateBehaviour = [&]() {
+        void updateBehaviour() {
             while(shouldContinue) {
                 dataStore->store(nunchuckReader->readDeviceValues());
             }

@@ -32,6 +32,14 @@ namespace nunchuckadapter {
         JoystickPosition<int> getJoystickPosition(){
             return joystick.getPosition();
         }
+
+        Button getButtonZ(){
+            return buttonZ;
+        }
+
+        Button getButtonC(){
+            return buttonC;
+        }
     private:
         NunchuckJoystick joystick;
         NunchuckAccelerometer accelerometer;

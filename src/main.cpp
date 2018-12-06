@@ -18,6 +18,18 @@
 using namespace std;
 using namespace nunchuckadapter;
 
+void printData(NunchuckData values){
+    cout << " Joystick: [ " <<
+         values.getJoystickPosition().X << " X, " <<
+         values.getJoystickPosition().Y << " Y ]" <<
+         "\n Accelerometer: [ " <<
+         values.getAccelerationValues().X << " on X,  " <<
+         values.getAccelerationValues().Y << " on Y,  " <<
+         values.getAccelerationValues().Z << " on Z ]" <<
+         "\n ButtonZ is pressed? " << (values.getButtonZ().isPressed() ? "TRUE" : "FALSE") <<
+         " ButtonC is pressed? " << (values.getButtonC().isPressed() ? "TRUE" : "FALSE") << endl;
+}
+
 int main() {
     int NUNCHUCK_DEVICE = 0x52;
 
@@ -28,8 +40,8 @@ int main() {
         auto reader = new NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
         for(int i = 0; i < 20;  i++){
             NunchuckData values = reader->readDeviceValues();
-            cout << "Value sampled by the Main Thread > Joystick pos: " <<
-            values.getJoystickPosition().X << endl;
+            cout << "Value sampled by the Main Thread " << endl;
+            printData(values);
         }
 
         cout << "-----------------------------------------------" << endl;
@@ -38,8 +50,8 @@ int main() {
         auto sampler = new NunchuckDataSampler(reader, dataStore);
         for(int i = 0; i < 20;  i++){
             NunchuckData values = dataStore->fetch();
-            cout << "Value sampled by a NunchuckDataSampler > Joystick pos: " <<
-            values.getJoystickPosition().X << endl;
+            cout << "Value sampled by a NunchuckDataSampler" << endl;
+            printData(values);
             std::this_thread::sleep_for(chrono::milliseconds(1000));
         }
 
