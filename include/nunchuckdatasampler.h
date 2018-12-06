@@ -20,7 +20,7 @@ namespace nunchuckadapter{
             this->nunchuckData = NunchuckData();
         }
 
-        void store(const NunchuckData data){
+        void store(const NunchuckData &data){
             std::lock_guard <std::mutex> lock(internal_mutex);
             this->nunchuckData = data;
         }

@@ -13,17 +13,15 @@ namespace nunchuckadapter {
 
     class NunchuckData{
     public:
-        NunchuckData(NunchuckJoystick joystick,
-                NunchuckAccelerometer accelerometer,
-                NunchuckButton buttonZ,
-                NunchuckButton buttonC){
-            this->joystick = joystick;
-            this->accelerometer = accelerometer;
+        NunchuckData(NunchuckJoystick joystick = NunchuckJoystick(),
+                NunchuckAccelerometer accelerometer = NunchuckAccelerometer(),
+                NunchuckButton buttonZ = NunchuckButton(),
+                NunchuckButton buttonC = NunchuckButton()){
+            this->joystick = std::move(joystick);
+            this->accelerometer = std::move(accelerometer);
             this->buttonZ = buttonZ;
-            this->buttonC = buttonC;
+            this->buttonC =buttonC;
         }
-
-        NunchuckData(): NunchuckData(NunchuckJoystick(),NunchuckAccelerometer(), NunchuckButton(), NunchuckButton()){};
 
         ThreeAxisAcceleration<int> getAccelerationValues() {
             return accelerometer.getAcceleration();
