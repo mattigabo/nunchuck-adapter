@@ -2,8 +2,8 @@
 // Created by Matteo Gabellini on 2018-12-04.
 //
 
-#ifndef NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H
-#define NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H
+#ifndef NUNCHUCKADAPTER_NUNCHUCKDATASAMPLER_H
+#define NUNCHUCKADAPTER_NUNCHUCKDATASAMPLER_H
 
 #include <thread>
 #include "nunchuckdata.h"
@@ -69,4 +69,4 @@ namespace nunchuckadapter{
     };
 }
 
-#endif //NUNCHUCKADAPTER_NUNCHUCKOBSERVER_H
+#endif //NUNCHUCKADAPTER_NUNCHUCKDATASAMPLER_H
