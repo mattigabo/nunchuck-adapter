@@ -22,7 +22,7 @@ namespace  nunchuckadapter {
         int i2CFileDescriptor;
     };
 
-    MockedWiringPiI2C mockedI2C = {42};
+    const MockedWiringPiI2C mockedI2C = {42};
 
     inline void wiringPiSetup() {
         std::cout << "Set up function of the WiringPi Library Called" << std::endl;
