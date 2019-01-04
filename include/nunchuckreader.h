@@ -89,10 +89,10 @@ namespace nunchuckadapter{
             int joyY = readBuffer[1];
             NunchuckJoystick joystick = NunchuckJoystick(joyX, joyY);
 
-            int accelX = (readBuffer[2] << 2) | ((readBuffer[5] & 0xc0) >> 6);
-            int accelY = (readBuffer[3] << 2) | ((readBuffer[5] & 0x30) >> 4);
-            int accelZ = (readBuffer[4] << 2) | ((readBuffer[5] & 0x0c) >> 2);
-            NunchuckAccelerometer accelerometer = NunchuckAccelerometer(accelX, accelY, accelZ);
+            int rawAccelX = (readBuffer[2] << 2) | ((readBuffer[5] & 0xc0) >> 6);
+            int rawAccelY = (readBuffer[3] << 2) | ((readBuffer[5] & 0x30) >> 4);
+            int rawAccelZ = (readBuffer[4] << 2) | ((readBuffer[5] & 0x0c) >> 2);
+            NunchuckAccelerometer accelerometer = NunchuckAccelerometer(rawAccelX, rawAccelY, rawAccelZ);
 
             int c = (readBuffer[5] & 0x02) >> 1;
             NunchuckButton buttonC = NunchuckButton(c);

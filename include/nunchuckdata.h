@@ -20,10 +20,10 @@ namespace nunchuckadapter {
             this->joystick = std::move(joystick);
             this->accelerometer = std::move(accelerometer);
             this->buttonZ = buttonZ;
-            this->buttonC =buttonC;
+            this->buttonC = buttonC;
         }
 
-        ThreeAxisAcceleration<int> getAccelerationValues() {
+        ThreeAxisAcceleration<float> getAccelerationValues() {
             return accelerometer.getAcceleration();
         }
 

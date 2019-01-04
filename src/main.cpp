@@ -23,9 +23,9 @@ void printData(NunchuckData values){
          values.getJoystickPosition().X << " X, " <<
          values.getJoystickPosition().Y << " Y ]" <<
          "\n Accelerometer: [ " <<
-         values.getAccelerationValues().X << " on X,  " <<
-         values.getAccelerationValues().Y << " on Y,  " <<
-         values.getAccelerationValues().Z << " on Z ]" <<
+         values.getAccelerationValues().X << " in g on X,  " <<
+         values.getAccelerationValues().Y << " in g on Y,  " <<
+         values.getAccelerationValues().Z << " in g on Z ]" <<
          "\n ButtonZ is pressed? " << (values.getButtonZ().isPressed() ? "TRUE" : "FALSE") <<
          " ButtonC is pressed? " << (values.getButtonC().isPressed() ? "TRUE" : "FALSE") << endl;
 }
