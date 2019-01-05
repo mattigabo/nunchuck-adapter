@@ -18,6 +18,20 @@
 using namespace std;
 using namespace nunchuckadapter;
 
+
+
+void printRawData(RawNunchuckData rawData){
+    cout << " Joystick: [ " <<
+         rawData.joystickPositionX << " X, " <<
+         rawData.joystickPositionY << " Y ]" <<
+         "\n Accelerometer: [ " <<
+         rawData.accelerationOnX << " in g on X,  " <<
+         rawData.accelerationOnY << " in g on Y,  " <<
+         rawData.accelerationOnZ << " in g on Z ]" <<
+         "\n ButtonZ state " << rawData.buttonZState <<
+         " ButtonC state " << rawData.buttonCState << endl;
+}
+
 void printData(NunchuckData values){
     cout << " Joystick: [ " <<
          values.getJoystickPosition().X << " X, " <<
@@ -35,22 +49,34 @@ int main() {
 
     cout << "Testing the nunchuck through I2C with the wiringPi Library" << endl;
     wiringPiSetup();
+    cout << "-----------------------------------------------" << endl;
     try{
-        cout << "Test read directly from the main thread" << endl;
         auto reader = new NunchuckReader(NunchuckReader::InitializationMode::NOT_ENCRYPTED);
+
+        cout << "-----------------------------------------------" << endl;
+
+        cout << "Test read RAW DATA" << endl;
+        for(int i = 0; i < 20;  i++){
+            RawNunchuckData values = reader->readRawData();
+            printRawData(values);
+        }
+        cout << "-----------------------------------------------" << endl;
+        cout << "-----------------------------------------------" << endl;
+
+        cout << "Test read directly from the main thread" << endl;
+        cout << "Value sampled by the Main Thread " << endl;
         for(int i = 0; i < 20;  i++){
             NunchuckData values = reader->readDeviceValues();
-            cout << "Value sampled by the Main Thread " << endl;
             printData(values);
         }
 
         cout << "-----------------------------------------------" << endl;
         cout << "Test read from the NunchuckDataSampler thread" << endl;
+        cout << "Value sampled by a NunchuckDataSampler" << endl;
         auto dataStore = new NunchuckDataStore();
         auto sampler = new NunchuckDataSampler(reader, dataStore);
         for(int i = 0; i < 20;  i++){
             NunchuckData values = dataStore->fetch();
-            cout << "Value sampled by a NunchuckDataSampler" << endl;
             printData(values);
             std::this_thread::sleep_for(chrono::milliseconds(1000));
         }

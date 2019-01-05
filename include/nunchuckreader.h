@@ -18,6 +18,16 @@
 
 namespace nunchuckadapter{
 
+    typedef struct RawNunchuckData{
+        int joystickPositionX;
+        int joystickPositionY;
+        int accelerationOnX;
+        int accelerationOnY;
+        int accelerationOnZ;
+        int buttonCState;
+        int buttonZState;
+    } RawNunchuckData;
+
     /**
     * This class encapsulate the interaction with Nunchuck ciurcuit through I2C protocol.
     * */
@@ -82,26 +92,29 @@ namespace nunchuckadapter{
          * read from the device.
          * */
         NunchuckData readDeviceValues(){
-            int readBuffer[6];
-            readRawData(readBuffer);
+            RawNunchuckData rawData = readRawData();
 
-            int joyX = readBuffer[0];
-            int joyY = readBuffer[1];
-            NunchuckJoystick joystick = NunchuckJoystick(joyX, joyY);
-
-            int rawAccelX = (readBuffer[2] << 2) | ((readBuffer[5] & 0xc0) >> 6);
-            int rawAccelY = (readBuffer[3] << 2) | ((readBuffer[5] & 0x30) >> 4);
-            int rawAccelZ = (readBuffer[4] << 2) | ((readBuffer[5] & 0x0c) >> 2);
-            NunchuckAccelerometer accelerometer = NunchuckAccelerometer(rawAccelX, rawAccelY, rawAccelZ);
-
-            int c = (readBuffer[5] & 0x02) >> 1;
-            NunchuckButton buttonC = NunchuckButton(c);
-
-            int z = readBuffer[5] & 0x01;
-            NunchuckButton buttonZ = NunchuckButton(z);
+            NunchuckJoystick joystick = NunchuckJoystick(rawData.joystickPositionX, rawData.joystickPositionY);
+            NunchuckAccelerometer accelerometer = NunchuckAccelerometer(rawData.accelerationOnX, rawData.accelerationOnY, rawData.accelerationOnZ);
+            NunchuckButton buttonC = NunchuckButton(rawData.buttonCState);
+            NunchuckButton buttonZ = NunchuckButton(rawData.buttonZState);
 
             return NunchuckData(joystick, accelerometer, buttonZ, buttonC);
         };
+
+
+        /**
+         * Read the raw integer data values from the nunchuck.
+         * The read require minimun the microseconds specified in the constructor as
+         * "circuitAdaptationWaitMicroseconds".
+         * @return a RawNunchuckData with the parsed data from the device buffer into the corresponding integer values
+         * */
+        RawNunchuckData readRawData(){
+            int readBuffer[6];
+            fetchDeviceBuffer(readBuffer);
+            return parseDeviceBuffer(readBuffer);
+        }
+
     private:
         bool encyptedModeEnabled;
         int i2CPortFileDescriptor;
@@ -135,7 +148,7 @@ namespace nunchuckadapter{
             return (readByte ^ 0x17) + 0x17;
         }
 
-        void readRawData(int *readBuffer) {
+        void fetchDeviceBuffer(int *readBuffer) {
             wiringPiI2CWrite(i2CPortFileDescriptor, 0x00);
             std::this_thread::sleep_for(std::chrono::microseconds(circuitAdaptationWaitMicrosecons));
 
@@ -145,6 +158,20 @@ namespace nunchuckadapter{
             }
         };
 
+        RawNunchuckData parseDeviceBuffer(int *readBuffer){
+            int joyX = readBuffer[0];
+            int joyY = readBuffer[1];
+
+            int rawAccelX = (readBuffer[2] << 2) | ((readBuffer[5] & 0xc0) >> 6);
+            int rawAccelY = (readBuffer[3] << 2) | ((readBuffer[5] & 0x30) >> 4);
+            int rawAccelZ = (readBuffer[4] << 2) | ((readBuffer[5] & 0x0c) >> 2);
+
+            int c = (readBuffer[5] & 0x02) >> 1;
+
+            int z = readBuffer[5] & 0x01;
+
+            return {joyX, joyY, rawAccelX, rawAccelY, rawAccelZ, c , z};
+        }
     };
 }
 
