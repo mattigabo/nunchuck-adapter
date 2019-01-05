@@ -25,9 +25,9 @@ void printRawData(RawNunchuckData rawData){
          rawData.joystickPositionX << " X, " <<
          rawData.joystickPositionY << " Y ]" <<
          "\n Accelerometer: [ " <<
-         rawData.accelerationOnX << " in g on X,  " <<
-         rawData.accelerationOnY << " in g on Y,  " <<
-         rawData.accelerationOnZ << " in g on Z ]" <<
+         rawData.accelerationOnX << " X,  " <<
+         rawData.accelerationOnY << " Y,  " <<
+         rawData.accelerationOnZ << " Z ]" <<
          "\n ButtonZ state " << rawData.buttonZState <<
          " ButtonC state " << rawData.buttonCState << endl;
 }
@@ -59,6 +59,7 @@ int main() {
         for(int i = 0; i < 20;  i++){
             RawNunchuckData values = reader->readRawData();
             printRawData(values);
+            std::this_thread::sleep_for(chrono::milliseconds(500));
         }
         cout << "-----------------------------------------------" << endl;
         cout << "-----------------------------------------------" << endl;
@@ -68,6 +69,7 @@ int main() {
         for(int i = 0; i < 20;  i++){
             NunchuckData values = reader->readDeviceValues();
             printData(values);
+            std::this_thread::sleep_for(chrono::milliseconds(500));
         }
 
         cout << "-----------------------------------------------" << endl;
