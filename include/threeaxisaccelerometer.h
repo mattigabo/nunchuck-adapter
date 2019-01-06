@@ -22,16 +22,29 @@ namespace nunchuckadapter {
 
     /**
      * This class represents the accelerometer of the Nunchuck.
-     * Internally this class convert automatically the raw accelerometer integer values (range from 0 to 1023) into
+     * Internally this class convert automatically the raw accelerometer integer values (10bit, range from 0 to 1023) into
      * the relative float "g" value (interval measured by the chip is between -2g an 2g)
+     *
+     * " The accelerometer chip is in the LIS3L02 series from STMicroelectronics.
+     * The AE variant is not on their web site;"     *
+     * reference (http://wiibrew.org/wiki/Wiimote/Extension_Controllers/Nunchuck)
+     *
+     * According to the Chipworks MEMS reports Dec-2010 (http://www.chipworks.com/Products/Chipworks_Latest%20MEMS%20Reports-Dec2010.pdf)
+     * the device "STMicroelectronics 3-Axis Accelerometer (from Wii) LIS3L02AE" mounted on the Wii nunchuck is the descripted by
+     * "The LIS3L02AL is a low-power 3-axis linear capacitive accelerometer that includes a sensing element and an IC interface"
+     *
+     * The class constant relative to the characteristics of the circuit is taken from the datasheet of the model LIS3L02AL
+     *
      * */
     class NunchuckAccelerometer : ThreeAxisAccelerometer<float>{
     public:
         static const int MIN_ACCELEROMETER_VALUE = 0;
         static const int MAX_ACCELEROMETER_VALUE = 1023;
-        static constexpr float MIN_G_MEASURED = 0 - 2.0; // -2g
-        static constexpr float MAX_G_MEASURED = 2.0; // 2g
-        static constexpr float conversionFactorRawToG = ((MAX_G_MEASURED - MIN_G_MEASURED)/(MAX_ACCELEROMETER_VALUE - MIN_ACCELEROMETER_VALUE));
+
+        static constexpr float referenceVoltage = 3.3;
+        static constexpr float sensitivity = referenceVoltage/5;
+        static constexpr float zeroGVoltage = referenceVoltage/2;
+        static constexpr float conversionFactorRawToVolts = referenceVoltage/MAX_ACCELEROMETER_VALUE;
 
         NunchuckAccelerometer(const int rawAccelerationOnX,const  int rawAccelerationOnY,const  int rawAccelerationOnZ){
             acceleration = {
@@ -70,7 +83,7 @@ namespace nunchuckadapter {
         }
 
         static float convertRawValueToG(int rawValue){
-            return rawValue * conversionFactorRawToG + MIN_G_MEASURED;
+            return ((rawValue * conversionFactorRawToVolts) - zeroGVoltage)/sensitivity;
         }
     private:
         ThreeAxisAcceleration<float> acceleration;
