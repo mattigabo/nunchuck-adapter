@@ -50,7 +50,7 @@ namespace nunchuckadapter{
             if(circuitAdaptationWaitMicroseconds < MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS){
                 throw "The minimun circuit adapdation wait time is "
                 + std::to_string(NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS)
-                + " microseconds. Please specify a value less than"
+                + " microseconds. Please specify a value greater than or equal to"
                 + std::to_string(NunchuckReader::MINIMUN_CIRCUIT_ADAPTATION_WAIT_MICROSECONDS);
             }
             this->circuitAdaptationWaitMicrosecons = circuitAdaptationWaitMicroseconds;
